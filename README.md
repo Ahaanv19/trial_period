@@ -1,53 +1,69 @@
+# 💬 TextBack Backend
 
-# 🚗 Macro Cosmos Backend
+The **TextBack Backend** is the server-side system behind **TextBack — Think
+Before You Send**, an AI message advisor. It analyzes a message you're about to
+send and returns a structured verdict: whether to **send / edit / don't send**,
+a Safe-to-Send score, reply-likelihood, tone read, turn-offs, and cleaner
+rewrites.
 
-The **Macro Cosmos Backend** is the server-side system behind Macro Cosmos — a full-stack platform built to improve routing and traffic efficiency in the City of Poway.
-
-This backend handles routing logic, traffic data processing, and communication with the frontend and external APIs.
+It powers the React frontend (`../send-wise-helper`) over a single endpoint:
+**`POST /api/analyze`** on port **8275**.
 
 ---
 
 ## 💡 How It Works
 
-1. **Receives Requests from Frontend**  
-   The frontend sends route requests, hazard reports, or user actions to the backend using HTTP endpoints.
-
-2. **Processes Real-Time Traffic Data**  
-   The backend connects with Google Maps and San Diego’s open datasets to calculate accurate and optimized routes.
-
-3. **Returns Optimized Routes or Data**  
-   Based on traffic conditions, user routines, or hazard locations, it returns optimized routing instructions or relevant data.
-
-4. **Stores Data**  
-   All hazard reports, user routines, and simulation settings are stored in a database using SQLAlchemy.
+1. **Receives a message from the frontend** — `POST /api/analyze` with
+   `{ message, context, toneBias }`.
+2. **Analyzes it with Google Gemini** — if a real `GEMINI_API_KEY` is set. The
+   call retries briefly on transient errors.
+3. **Falls back to a local engine** — a deterministic heuristic analyzer runs if
+   Gemini is unavailable, so the API **never errors out** and works fully
+   offline.
+4. **Normalizes the result** — every response is coerced into the exact JSON
+   schema the frontend renders (all four rewrite styles, insights, etc.).
+5. **Stores it in SQLite** — each analysis is persisted via SQLAlchemy for a
+   durable server-side history (`GET /api/analyze/history`).
 
 ---
 
 ## ⚙️ Tech Used
 
-- **Flask** – to create REST APIs  
-- **SQLAlchemy** – to manage the database  
-- **Google Maps API** – for traffic and routing data  
-- **Docker** – for easy deployment  
-- **JSON/CSV** – to handle static and live datasets  
+- **Flask** – REST API
+- **SQLAlchemy + SQLite** – analysis history
+- **Google Gemini** – AI analysis engine (with local fallback)
+- **Flask-CORS / Flask-Limiter** – security + cross-origin support
 
 ---
 
-## 📁 Key Features
+## 🔌 Endpoints
 
-- Route optimization using live traffic
-- Daily routine planning and storage
-- Hazard alert reporting and visualization
-- Support for fleet simulation
-- Easy API integration with frontend
+| Method   | Route                   | Purpose                                  |
+| -------- | ----------------------- | ---------------------------------------- |
+| `POST`   | `/api/analyze`          | Analyze a message → full structured JSON |
+| `GET`    | `/api/analyze/history`  | Recent analyses (from SQLite)            |
+| `DELETE` | `/api/analyze/history`  | Clear server-side history                |
+| `GET`    | `/api/analyze/health`   | Health check (reports active engine)     |
 
 ---
 
 ## 🧪 How to Run
 
 ```bash
-# Install dependencies
+# First time only
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-# Run the server
-python run.py
+# Run the server (port 8275)
+python main.py
+```
+
+Then start the frontend (`cd ../send-wise-helper && make`) and open
+**http://localhost:8080**.
+
+### Configuration (`.env`)
+
+```
+GEMINI_API_KEY=<your Google AI Studio key>   # optional — falls back to local analyzer
+FLASK_PORT=8275
+```

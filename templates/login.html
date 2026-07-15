@@ -2,78 +2,77 @@
 {% set project = "Login" %}
 
 {% block style %}
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
 <style>
-  :root { --mc-ocean:#0a7cc2; --mc-ocean-2:#12b0cc; --mc-text:#e8f1fb; --mc-muted:#9fb6cf;
-    --mc-glass:rgba(13,24,42,.62); --mc-border:rgba(148,197,236,.16); }
-  body { font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
+  :root { --tb-purple:#7c53e0; --tb-purple-2:#b98cf0; --tb-text:#ece8fb; --tb-muted:#b3a9d4;
+    --tb-glass:rgba(30,22,48,.62); --tb-border:rgba(168,130,240,.18); }
+  body { font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; }
 
-  .mc-login-wrap { min-height:calc(100vh - 70px); display:flex; align-items:center; justify-content:center; padding:2rem 1.1rem; }
-  .mc-login {
+  .tb-login-wrap { min-height:calc(100vh - 70px); display:flex; align-items:center; justify-content:center; padding:2rem 1.1rem; }
+  .tb-login {
     width:100%; max-width:420px; padding:2.4rem 2.1rem; border-radius:24px;
-    background:var(--mc-glass); border:1px solid var(--mc-border); backdrop-filter:blur(18px);
+    background:var(--tb-glass); border:1px solid var(--tb-border); backdrop-filter:blur(18px);
     box-shadow:0 40px 80px -44px rgba(0,0,0,.85);
   }
-  .mc-brand { display:flex; align-items:center; gap:.7rem; justify-content:center; margin-bottom:.4rem; }
-  .mc-mark { width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center;
-    color:#fff; font-size:1.3rem; background:linear-gradient(135deg,var(--mc-ocean),var(--mc-ocean-2));
-    box-shadow:0 14px 28px -12px rgba(10,124,194,.8); }
-  .mc-login h1 { text-align:center; font-family:'Fraunces',Georgia,serif; font-weight:700; font-size:1.7rem; margin:.6rem 0 .2rem;
-    background:linear-gradient(120deg,#fff 0%,#bfe6ff 55%,var(--mc-ocean-2) 100%);
+  .tb-brand { display:flex; align-items:center; gap:.7rem; justify-content:center; margin-bottom:.4rem; }
+  .tb-mark { width:52px; height:52px; border-radius:15px; display:flex; align-items:center; justify-content:center;
+    color:#fff; font-size:1.6rem; background:linear-gradient(135deg,var(--tb-purple),var(--tb-purple-2));
+    box-shadow:0 14px 28px -12px rgba(124,83,224,.8); }
+  .tb-login h1 { text-align:center; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1.7rem; margin:.6rem 0 .2rem;
+    background:linear-gradient(120deg,#fff 0%,#e3d5ff 55%,var(--tb-purple-2) 100%);
     -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text; }
-  .mc-login .sub { text-align:center; color:var(--mc-muted); font-size:.92rem; margin-bottom:1.6rem; }
+  .tb-login .sub { text-align:center; color:var(--tb-muted); font-size:.92rem; margin-bottom:1.6rem; }
 
-  .mc-alert { padding:.75rem .95rem; border-radius:12px; font-size:.88rem; font-weight:600; margin-bottom:1.1rem; display:flex; align-items:center; gap:.55rem; }
-  .mc-alert.err { color:#ffb4b4; background:rgba(255,90,90,.12); border:1px solid rgba(255,90,90,.35); }
-  .mc-alert.ok { color:#b8f5d0; background:rgba(16,185,129,.12); border:1px solid rgba(16,185,129,.35); }
+  .tb-alert { padding:.75rem .95rem; border-radius:12px; font-size:.88rem; font-weight:600; margin-bottom:1.1rem; display:flex; align-items:center; gap:.55rem; }
+  .tb-alert.err { color:#ffb4b4; background:rgba(224,85,95,.14); border:1px solid rgba(224,85,95,.35); }
+  .tb-alert.ok { color:#c9f7e2; background:rgba(47,191,143,.12); border:1px solid rgba(47,191,143,.35); }
 
-  .mc-field { margin-bottom:1.05rem; }
-  .mc-field label { display:block; color:var(--mc-muted); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.45rem; }
-  .mc-input { width:100%; padding:.8rem .95rem; border-radius:12px; font-size:.98rem; color:var(--mc-text);
-    background:rgba(255,255,255,.05); border:1px solid var(--mc-border); outline:none; transition:border-color .18s, box-shadow .18s; }
-  .mc-input::placeholder { color:#6f88a6; }
-  .mc-input:focus { border-color:var(--mc-ocean-2); box-shadow:0 0 0 3px rgba(18,176,204,.18); }
+  .tb-field { margin-bottom:1.05rem; }
+  .tb-field label { display:block; color:var(--tb-muted); font-size:.8rem; font-weight:700; text-transform:uppercase; letter-spacing:.05em; margin-bottom:.45rem; }
+  .tb-input { width:100%; padding:.8rem .95rem; border-radius:12px; font-size:.98rem; color:var(--tb-text);
+    background:rgba(255,255,255,.05); border:1px solid var(--tb-border); outline:none; transition:border-color .18s, box-shadow .18s; }
+  .tb-input::placeholder { color:#8a7fb0; }
+  .tb-input:focus { border-color:var(--tb-purple-2); box-shadow:0 0 0 3px rgba(124,83,224,.22); }
 
-  .mc-submit { width:100%; margin-top:.4rem; padding:.85rem; border:none; border-radius:13px; cursor:pointer;
-    font-weight:800; font-size:1rem; color:#fff; letter-spacing:.01em;
-    background:linear-gradient(135deg,var(--mc-ocean),var(--mc-ocean-2)); box-shadow:0 16px 34px -16px rgba(10,124,194,.9);
+  .tb-submit { width:100%; margin-top:.4rem; padding:.85rem; border:none; border-radius:13px; cursor:pointer;
+    font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:1rem; color:#fff; letter-spacing:.01em;
+    background:linear-gradient(135deg,var(--tb-purple),var(--tb-purple-2)); box-shadow:0 16px 34px -16px rgba(124,83,224,.9);
     transition:transform .18s, box-shadow .18s; }
-  .mc-submit:hover { transform:translateY(-2px); box-shadow:0 22px 44px -18px rgba(10,124,194,1); }
-  .mc-foot { text-align:center; margin-top:1.3rem; }
-  .mc-foot a { color:var(--mc-muted); text-decoration:none; font-size:.85rem; font-weight:600; }
-  .mc-foot a:hover { color:var(--mc-ocean-2); }
+  .tb-submit:hover { transform:translateY(-2px); box-shadow:0 22px 44px -18px rgba(124,83,224,1); }
+  .tb-foot { text-align:center; margin-top:1.3rem; }
+  .tb-foot a { color:var(--tb-muted); text-decoration:none; font-size:.85rem; font-weight:600; }
+  .tb-foot a:hover { color:var(--tb-purple-2); }
 </style>
 {% endblock %}
 
 {% block body %}
-<div class="mc-login-wrap">
-  <div class="mc-login">
-    <div class="mc-brand"><div class="mc-mark"><img src="{{ url_for('static', filename='assets/macro-cosmos-logo.png') }}" alt="Macro Cosmos" style="width:100%;height:100%;object-fit:cover;border-radius:inherit;"></div></div>
-    <h1>Macro Cosmos</h1>
+<div class="tb-login-wrap">
+  <div class="tb-login">
+    <div class="tb-brand"><div class="tb-mark">💬</div></div>
+    <h1>TextBack</h1>
     <p class="sub">Sign in to the backend control center</p>
 
     {% if error %}
-      <div class="mc-alert err"><i class="fa fa-exclamation-circle"></i> Invalid username and password.</div>
+      <div class="tb-alert err"><i class="fa fa-exclamation-circle"></i> Invalid username and password.</div>
     {% endif %}
     {% if logout %}
-      <div class="mc-alert ok"><i class="fa fa-check-circle"></i> You have been logged out.</div>
+      <div class="tb-alert ok"><i class="fa fa-check-circle"></i> You have been logged out.</div>
     {% endif %}
 
     <form name="f" action="{{ url_for('login') }}" method="POST">
-      <div class="mc-field">
+      <div class="tb-field">
         <label for="username">User ID</label>
-        <input id="username" name="username" class="mc-input" placeholder="Enter your user ID" required>
+        <input id="username" name="username" class="tb-input" placeholder="Enter your user ID" required>
       </div>
-      <div class="mc-field">
+      <div class="tb-field">
         <label for="password">Password</label>
-        <input type="password" id="password" name="password" class="mc-input" placeholder="Enter your password" required>
+        <input type="password" id="password" name="password" class="tb-input" placeholder="Enter your password" required>
       </div>
       <!-- Hidden input for 'next' page, which is set on unauthorized redirects -->
       <input type="hidden" name="next" value="{{ next }}">
-      <button type="submit" class="mc-submit">Sign In</button>
+      <button type="submit" class="tb-submit">Sign In</button>
     </form>
 
-    <div class="mc-foot"><a href="https://macro-cosmos.netlify.app"><i class="fa fa-external-link"></i> Go to the Macro Cosmos app</a></div>
+    <div class="tb-foot"><a href="http://localhost:8080"><i class="fa fa-external-link"></i> Go to the TextBack app</a></div>
   </div>
 </div>
 {% endblock %}

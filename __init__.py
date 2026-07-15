@@ -20,8 +20,13 @@ login_manager.init_app(app)
 cors = CORS(app, 
     supports_credentials=True, 
     origins=[
-        'http://localhost:4887', 
-        'http://127.0.0.1:4887', 
+        # TextBack frontend (Vite dev server + this app's own port)
+        'http://localhost:8080',
+        'http://127.0.0.1:8080',
+        'http://localhost:8275',
+        'http://127.0.0.1:8275',
+        'http://localhost:4887',
+        'http://127.0.0.1:4887',
         'http://localhost:4100',
         'http://127.0.0.1:4100',
         'https://ahaanv19.github.io',

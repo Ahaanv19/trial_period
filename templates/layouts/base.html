@@ -7,10 +7,10 @@ This HTML is setup as as a Jinja2 layout, coders use layouts for:
 <!DOCTYPE HTML>
 <html lang="en">
 
-{% set basename = "Macro Cosmos" %}
-{% set github = "https://github.com/nighthawkcoders" %}
-{% set twitter = "https://twitter.com/NighthawkCoding" %}
-{% set youtube = "https://www.youtube.com/channel/UClIKOsDS5dsfzFA3zveDT3Q?view_as=subscriber" %}
+{% set basename = "TextBack" %}
+{% set github = "https://github.com/Ahaanv19" %}
+{% set twitter = "https://twitter.com/" %}
+{% set youtube = "https://www.youtube.com/" %}
 
 <head>
     <!-- Required meta tags -->
@@ -30,22 +30,26 @@ This HTML is setup as as a Jinja2 layout, coders use layouts for:
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
 
+    <!-- TextBack brand fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     {% block head %}
     {% endblock %}
-      
+
     <style>
         .navbar {
             position: static;
             z-index: 9999;
         }
-        /* Dark, premium animated "aurora" background — replaces the old blue
-           Vanta waves. Baked into the layout so every page (even ones that
-           override the background block) stays dark and the light UI reads. */
-        html, body { background: #070f1c; }
-        body { color: #e8f1fb; }
+        /* TextBack "purple aurora" background — themed to match the React app's
+           purple gradient identity. Pure CSS so it can never fail to load. */
+        html, body { background: #0e0a1a; }
+        body { color: #ece8fb; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
         #body_background {
             position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1;
-            overflow: hidden; background: #070f1c;
+            overflow: hidden; background: #0e0a1a;
         }
         #body_background::before, #body_background::after {
             content: ''; position: absolute; inset: -30%;
@@ -53,15 +57,15 @@ This HTML is setup as as a Jinja2 layout, coders use layouts for:
         }
         #body_background::before {
             background:
-              radial-gradient(closest-side, rgba(18,176,204,.34), transparent 70%) 12% 18% / 46% 46%,
-              radial-gradient(closest-side, rgba(10,124,194,.32), transparent 70%) 82% 8%  / 42% 42%,
-              radial-gradient(closest-side, rgba(124,77,255,.22), transparent 70%) 78% 88% / 40% 40%;
+              radial-gradient(closest-side, rgba(124,83,224,.38), transparent 70%) 12% 18% / 46% 46%,
+              radial-gradient(closest-side, rgba(168,120,240,.30), transparent 70%) 82% 8%  / 42% 42%,
+              radial-gradient(closest-side, rgba(96,60,200,.26), transparent 70%) 78% 88% / 40% 40%;
             animation: mcAurora1 26s ease-in-out infinite alternate;
         }
         #body_background::after {
             background:
-              radial-gradient(closest-side, rgba(16,185,129,.18), transparent 70%) 20% 88% / 40% 40%,
-              radial-gradient(closest-side, rgba(18,176,204,.20), transparent 70%) 60% 42% / 44% 44%;
+              radial-gradient(closest-side, rgba(200,150,255,.18), transparent 70%) 20% 88% / 40% 40%,
+              radial-gradient(closest-side, rgba(124,83,224,.22), transparent 70%) 60% 42% / 44% 44%;
             animation: mcAurora2 34s ease-in-out infinite alternate;
         }
         @keyframes mcAurora1 {
@@ -79,8 +83,7 @@ This HTML is setup as as a Jinja2 layout, coders use layouts for:
     {% block style %}
     {% endblock %}
 
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/macro-cosmos-logo.png') }}">
-    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/macro-cosmos-logo-full.png') }}">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%237c53e0'/%3E%3Cstop offset='1' stop-color='%23b98cf0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='100' height='100' rx='24' fill='url(%23g)'/%3E%3Ctext x='50' y='68' font-size='56' text-anchor='middle' fill='white'%3E%F0%9F%92%AC%3C/text%3E%3C/svg%3E">
 
     <title>{{ basename }} | {{ project }} </title>
 

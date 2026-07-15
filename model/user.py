@@ -60,7 +60,6 @@ class User(db.Model, UserMixin):
     _pfp = db.Column(db.String(255), unique=False, nullable=True)
     _car = db.Column(db.String(255), unique=False, nullable=True)
    
-    posts = db.relationship('Post', backref='author', lazy=True)
                                  
     
     def __init__(self, name, uid, password="", role="User", pfp='', car='', email='?'):
