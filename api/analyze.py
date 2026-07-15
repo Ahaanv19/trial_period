@@ -150,29 +150,40 @@ def _analyze_with_gemini(message, context, tone_bias):
         "generationConfig": {
             "responseMimeType": "application/json",
             "temperature": 0.8,
+            # Cap output so responses stay complete, and disable "thinking" —
+            # gemini-3/2.5 flash are reasoning models that otherwise spend the
+            # token budget on hidden thoughts and TRUNCATE the JSON (which shows
+            # up as "Expecting ',' delimiter" parse errors). thinkingBudget 0
+            # sends the full budget to the answer so the JSON is always whole.
+            "maxOutputTokens": 2048,
+            "thinkingConfig": {"thinkingBudget": 0},
         },
     }
     import time
-    # Retry briefly on transient overload/rate-limit (503/429/500) — Google's
-    # gateway occasionally spikes. After the retries we fall back to the local
-    # engine, so the user never sees an error either way.
+    # One quick retry on transient overload/rate-limit (503/429/500) — Google's
+    # free tier spikes intermittently. We keep the timeout + retry tight so that
+    # if Gemini is having a bad moment we fall back to the local engine FAST
+    # (a couple seconds) instead of making the user wait. Either way they always
+    # get a valid result.
     resp = None
-    for attempt in range(3):
+    for attempt in range(2):
         try:
             resp = requests.post(url, json=payload,
                                  headers={"Content-Type": "application/json"},
-                                 timeout=45)
+                                 timeout=12)
         except requests.RequestException as e:
-            logger.warning("Gemini request failed (attempt %s): %s", attempt + 1, e)
-            resp = None
-            time.sleep(0.6 * (attempt + 1))
-            continue
+            # A timeout/network error already cost us the full timeout window —
+            # don't retry (that would double the wait); fall back immediately.
+            logger.warning("Gemini request failed (%s); falling back to local engine", e)
+            return None
         if resp.status_code == 200:
             break
         if resp.status_code in (429, 500, 502, 503):
-            logger.warning("Gemini transient %s (attempt %s), retrying...",
-                           resp.status_code, attempt + 1)
-            time.sleep(0.6 * (attempt + 1))
+            logger.warning("Gemini transient %s (attempt %s)%s",
+                           resp.status_code, attempt + 1,
+                           ", retrying..." if attempt == 0 else ", falling back to local engine")
+            if attempt == 0:
+                time.sleep(0.4)
             continue
         # Non-retryable error (e.g. 400/403) — stop and fall back.
         logger.warning("Gemini returned %s: %s", resp.status_code, resp.text[:300])
@@ -182,7 +193,10 @@ def _analyze_with_gemini(message, context, tone_bias):
         return None
     try:
         data = resp.json()
-        text = data["candidates"][0]["content"]["parts"][0]["text"]
+        parts = data["candidates"][0]["content"]["parts"]
+        # Join every non-"thought" text part (defensive: a reasoning model can
+        # return multiple parts; we only want the answer text).
+        text = "".join(p.get("text", "") for p in parts if not p.get("thought"))
         text = re.sub(r'^```json\s*', '', text.strip(), flags=re.I)
         text = re.sub(r'```\s*$', '', text).strip()
         return json.loads(text)
