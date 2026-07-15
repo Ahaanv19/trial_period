@@ -1,0 +1,104 @@
+<!-- Custom file for standardizing Project Data
+This HTML is setup as as a Jinja2 layout, coders use layouts for:
+ ... standardization of style
+ ... setting expectations for data
+ ... code reuse
+-->
+<!DOCTYPE HTML>
+<html lang="en">
+
+{% set basename = "Macro Cosmos" %}
+{% set github = "https://github.com/nighthawkcoders" %}
+{% set twitter = "https://twitter.com/NighthawkCoding" %}
+{% set youtube = "https://www.youtube.com/channel/UClIKOsDS5dsfzFA3zveDT3Q?view_as=subscriber" %}
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- JQuery -->
+    <script type="text/javascript" language="javascript" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap5.min.js"></script>
+
+    {% block head %}
+    {% endblock %}
+      
+    <style>
+        .navbar {
+            position: static;
+            z-index: 9999;
+        }
+        /* Dark, premium animated "aurora" background — replaces the old blue
+           Vanta waves. Baked into the layout so every page (even ones that
+           override the background block) stays dark and the light UI reads. */
+        html, body { background: #070f1c; }
+        body { color: #e8f1fb; }
+        #body_background {
+            position: fixed; inset: 0; width: 100%; height: 100%; z-index: -1;
+            overflow: hidden; background: #070f1c;
+        }
+        #body_background::before, #body_background::after {
+            content: ''; position: absolute; inset: -30%;
+            background-repeat: no-repeat; filter: blur(72px); will-change: transform;
+        }
+        #body_background::before {
+            background:
+              radial-gradient(closest-side, rgba(18,176,204,.34), transparent 70%) 12% 18% / 46% 46%,
+              radial-gradient(closest-side, rgba(10,124,194,.32), transparent 70%) 82% 8%  / 42% 42%,
+              radial-gradient(closest-side, rgba(124,77,255,.22), transparent 70%) 78% 88% / 40% 40%;
+            animation: mcAurora1 26s ease-in-out infinite alternate;
+        }
+        #body_background::after {
+            background:
+              radial-gradient(closest-side, rgba(16,185,129,.18), transparent 70%) 20% 88% / 40% 40%,
+              radial-gradient(closest-side, rgba(18,176,204,.20), transparent 70%) 60% 42% / 44% 44%;
+            animation: mcAurora2 34s ease-in-out infinite alternate;
+        }
+        @keyframes mcAurora1 {
+            0%   { transform: translate3d(-2%,-1%,0) scale(1); }
+            100% { transform: translate3d(3%,2%,0) scale(1.12); }
+        }
+        @keyframes mcAurora2 {
+            0%   { transform: translate3d(2%,1%,0) scale(1.05); }
+            100% { transform: translate3d(-3%,-2%,0) scale(1); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            #body_background::before, #body_background::after { animation: none; }
+        }
+    </style>
+    {% block style %}
+    {% endblock %}
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='assets/macro-cosmos-logo.png') }}">
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='assets/macro-cosmos-logo-full.png') }}">
+
+    <title>{{ basename }} | {{ project }} </title>
+
+</head>
+
+<body>
+    <div id="body_background"></div>
+
+    {% include "layouts/navbar.html" %}
+
+    {% block body %}
+    {% endblock %}
+
+</body>
+
+{% block background %}
+    <!-- Animated background is now pure CSS (#body_background aurora above) —
+         no Vanta/three.js dependency, so it can never fail to load. -->
+{% endblock %}
+
+</html>
